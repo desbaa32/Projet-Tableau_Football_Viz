@@ -1,0 +1,27 @@
+--------------------___________MY Champ Calcule------_________________
+
+
+
+Home Win= IF [Winner Type] = "Home" THEN 1 ELSE 0 END
+Home Draw= IF [Winner Type] = "Draw" THEN 1 ELSE 0 END
+Home Loss= IF [Winner Type] = "Away" THEN 1 ELSE 0 END
+
+_____ Meme chose pour exterieur
+Away Win= IF [Winner Type] = "Away" THEN 1 ELSE 0 END
+Away Draw= IF [Winner Type] = "Draw" THEN 1 ELSE 0 END
+Away Loss= IF [Winner Type] = "Home" THEN 1 ELSE 0 END
+
+
+-----------------------------------
+
+Winner Team Players =IF [Winner Type] = "Home" THEN [Home Players] ELSE [Away Players] END
+
+Moy Age =(AVG([Home Avg Age]) + AVG([Away Avg Age])) / 2
+Moy Height= (AVG([Home Avg Height]) + AVG([Away Avg Height])) / 2
+Moy Weight= (AVG([Home Avg Weight]) + AVG([Away Avg Weight])) / 2
+
+Moy Goalkeeper Age= (AVG([Away Goalkeeper Age]) + AVG([Away Goalkeeper Age])) / 2
+Moy Goalkeeper Height= (AVG([Away Goalkeeper Height]) + AVG([Away Goalkeeper Height])) / 2
+
+
+Goal Conceded= IF [Winner Type] = "Away" THEN [Away Team Goal] ELSEIF [Winner Type] = "Home" THEN [Home Team Goal] ELSE [Home Team Goal] + [Away Team Goal] END

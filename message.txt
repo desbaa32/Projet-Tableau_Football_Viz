@@ -1,0 +1,179 @@
+Bonjour,
+
+Tu n'as pas mis tes camarades en copie du mail, donc je te laisse leur
+faire suivre ce message
+
+Voila votre dataset : https://bigfiles.univ-paris8.fr/1k9d219
+
+Le fichier principal est foot-2008-2016.csv. Dans foot2.csv il y a
+éventuellement des données supplémentaires qui nécessitent un
+pré-traitement en python. Je décris d'abord le fichier principal :
+
+Le jeu de données inclue environ 26.000 matches de foot entre 2008 et 2016
+des championnats suivants : Belgium Jupiler League, England Premier
+League, France Ligue 1, Germany 1. Bundesliga, Italy Serie A, Netherlands
+Eredivisie, Poland Ekstraklasa, Portugal Liga ZON Sagres, Scotland Premier
+League, Spain LIGA BBVA, Switzerland Super League.
+
+Pour chaque match on a :
+
+- La ligue dont il fait partie
+
+- La saison
+
+- L'étape ("Stage") : ça correspond à la journée du championnat (première
+journée = 1, 2e journée = 2, etc.) C'est un nombre entre 1 et 38. Tableau
+l'auto détecte comme continu, et ce n'est pas fondamentalement incorrect,
+mais c'est plus probable que vous voudrez l'utiliser comme une variable
+discrète. Il faudra donc corriger l'auto-détection comme vu en cours
+
+- La date du match (juste la date sans l'heure)
+
+- Le nom de l'équipe à domicile (Home Team) et l'autre équipe (Away Team)
+
+- Le nombre de buts de chaque équipe (Home Team Goal, Away Team Goal)
+
+- Une variable "Winner" avec le nom de l'équipe gagnante ou le mot "Draw"
+pour match nul
+
+- Une variable "Winner Type" qui peut prendre 3 valeurs "Home", "Away",
+"Draw". C'est plus facile à manipuler que la variable "Winner" qui
+contient le nom de l'équipe gagnante.
+
+Pour certains matches seulement (24.750 matches sur les 26.000, des fois
+on n'a aussi que les données de une des équipes sur les deux), on a aussi :
+
+- Le nom, la taille (height), le poid (weight) et l'age du gardien de but
+(Goalkeeper) de chaque équipe. Pour l'age, c'est l'age au moment du match,
+pas l'age aujourd'hui en 2023
+
+- Les noms des 10 autres joueurs dans Home Players et Away Players. On
+peut s'en servir directement comme d'une variable discrète pour agréger
+les données par "version" de l'équipe (version exacte : les mêmes joueurs
+exactement). Mais on peut aussi chercher (en créant un champs calculé par
+recherche) des joueurs spécifiques. La formule est CONTAINS([Home
+Players], "Zidane") en remplaçant Zidane par ce qu'on cherche
+
+- la taille, le poids, et l'age moyen de l'ensemble des 11 joueurs de
+l'équipe (y compris gardien). Parfois il n'y a pas les données pour tous
+les 11 joueurs, dans ce cas c'est la moyenne pour les joueurs connus
+
+Pour 14.200 match (la moitié environ) on a des informations sur les
+évènements du match :
+
+- Nombre de Yellow Cards, 2nd Yellow Cards (2e carton jaune au même
+joueur), et Red Cards reçues pour Home et Away à chaque fois (dans la
+source brute, il y avait aussi des cartons qui concernaient un joueur ne
+faisant parti d'aucune équipe (sur le banc de touche peut-être ?), je les
+ai enlevé pour vous)
+
+- Possession by Home/Away at 20/40/60/80 min : le pourcentage de
+possession du ballon par l'équipe (Home+Away font toujours 100 au total
+pour la même minute) au bout de 20-25 minutes, 40-45 minutes (juste avant
+la mi-temps), 60-70, et 80-90 minutes (juste avant la fin du match). C'est
+des intervalles et pas, par exemple, 45/90 pile, parce que certains pays
+ont apparemment des matchs plus courts (85 minutes en Espagne ?) ou des
+mi-temps pas exactement au milieu
+
+Enfin, dans la source brute foot2.csv, il a aussi des données pour
+"cross", "shot on", "shot off", "foul commit", et "corner" mais je ne m'y
+connais pas assez pour les traiter correctement. Par exemple pour le match
+PSG/OM du 4/10/2015, on a ce qui est ci-dessous (on a donc ça pour chaque
+match un par un, ça fait beaucoup de lignes au total). Si ça vous
+intéresse et que vous savez de quoi ça parle, essayez de faire un
+pré-traitement en python (c'est du XML dans une colonne Excel)
+
+Cross :
+5e minute Javier Manquillo (OM) n = 38
+6e minute Romain Alessandrini (OM) n = 41
+10e minute Angel Di Maria (PSG) n = 65
+15e minute Serge Aurier (PSG) n = 80
+16e minute Romain Alessandrini (OM) n = 82
+16e minute Lassana Diarra (OM) n = 87
+18e minute Abdelaziz Barrada (OM) n = 92
+23e minute Marco Verratti (PSG) n = 109
+29e minute Angel Di Maria (PSG) n = 140
+30e minute Abdelaziz Barrada (OM) n = 154
+36e minute Angel Di Maria (PSG) n = 173
+42e minute Serge Aurier (PSG) n = 203
+48e minute Blaise Matuidi (PSG) n = 230
+51e minute Maxwell (PSG) n = 240
+56e minute Serge Aurier (PSG) n = 268
+67e minute Romain Alessandrini (OM) n = 302
+68e minute Serge Aurier (PSG) n = 310
+69e minute Abdelaziz Barrada (OM) n = 319
+73e minute Brice Dja Djedje (OM) n = 337
+81e minute Brice Dja Djedje (OM) n = 363
+81e minute Romain Alessandrini (OM) n = 367
+83e minute Brice Dja Djedje (OM) n = 372
+89e minute Romain Alessandrini (OM) n = 393
+90e minute Michy Batshuayi (OM) n = 401
+
+Shot on :
+2e minute : distance BY Remy Cabella (OM) n = 27
+7e minute : deflected BY Romain Alessandrini (OM) n = 49
+9e minute : distance BY Michy Batshuayi (OM) n = 63
+11e minute : header BY Angel Di Maria (PSG) n = 72
+12e minute : shot BY Zlatan Ibrahimovic (PSG) n = 76
+13e minute : distance BY Romain Alessandrini (OM) n = 77
+19e minute : shot BY Zlatan Ibrahimovic (PSG) n = 99
+23e minute : blocked_shot BY Zlatan Ibrahimovic (PSG) n = 111
+23e minute : big chance blocked BY Zlatan Ibrahimovic (PSG) n = 112
+27e minute : shot BY Remy Cabella (OM) n = 130
+29e minute : shot BY Angel Di Maria (PSG) n = 139
+43e minute : blocked_header BY Zlatan Ibrahimovic (PSG) n = 208
+58e minute : big chance shot BY Michy Batshuayi (OM) n = 273
+78e minute : big chance shot BY Javier Pastore (PSG) n = 354
+90e minute : big chance shot BY Remy Cabella (OM) n = 404
+
+Shot off :
+26e minute : shot BY Angel Di Maria (PSG) n = 125
+50e minute : shot BY Serge Aurier (PSG) n = 236
+52e minute : shot BY Thiago Silva (PSG) n = 244
+60e minute : distance BY Michy Batshuayi (OM) n = 280
+65e minute : shot BY Angel Di Maria (PSG) n = 292
+66e minute : shot BY Edinson Cavani (PSG) n = 299
+68e minute : big chance header BY Serge Aurier (PSG) n = 315
+69e minute : header BY Romain Alessandrini (OM) n = 323
+70e minute : distance BY Blaise Matuidi (PSG) n = 326
+79e minute : header BY Michy Batshuayi (OM) n = 359
+90e minute : shot BY Remy Cabella (OM) n = 416
+
+Foul commit :
+8e minute : pull BY Paolo De Ceglie (OM)  VICTIM Angel Di Maria n= 54
+15e minute : trip BY Serge Aurier (PSG)  VICTIM Abdelaziz Barrada n= 81
+16e minute : hands BY Thiago Motta (PSG) n = 90
+27e minute : pushing BY Zlatan Ibrahimovic (PSG)  VICTIM Abdelaziz Barrada
+n= 133
+34e minute : pull BY Serge Aurier (PSG)  VICTIM Paolo De Ceglie n= 167
+35e minute : pull BY Abdelaziz Barrada (OM)  VICTIM Serge Aurier n= 185
+38e minute : dangerous_play BY Blaise Matuidi (PSG)  VICTIM Michy
+Batshuayi n= 188
+40e minute : penalty BY Steve Mandanda (OM)  VICTIM Zlatan Ibrahimovic n= 193
+43e minute : penalty BY Rolando (OM) n = 212
+54e minute : trip BY Lucas Silva (OM)  VICTIM Marco Verratti n= 247
+55e minute : penalty BY Serge Aurier (PSG)  VICTIM Abdelaziz Barrada n= 255
+57e minute : trip BY Maxwell (PSG)  VICTIM Michy Batshuayi n= 270
+62e minute : pull BY Lassana Diarra (OM)  VICTIM Zlatan Ibrahimovic n= 288
+64e minute : pushing BY Lucas Silva (OM)  VICTIM Marco Verratti n= 290
+66e minute : trip BY Javier Manquillo (OM)  VICTIM Blaise Matuidi n= 296
+75e minute : pushing BY Thiago Motta (PSG)  VICTIM Lassana Diarra n= 341
+76e minute : trip BY Michy Batshuayi (OM)  VICTIM Thiago Motta n= 344
+77e minute : trip BY Angel Di Maria (PSG)  VICTIM Javier Manquillo n= 345
+77e minute : pushing BY Lassana Diarra (OM)  VICTIM Marco Verratti n= 350
+82e minute : hands BY Brice Dja Djedje (OM) n = 370
+86e minute : pull BY Lassana Diarra (OM)  VICTIM Blaise Matuidi n= 383
+88e minute : trip BY Marco Verratti (PSG)  VICTIM Remy Cabella n= 392
+90e minute : trip BY Blaise Matuidi (PSG)  VICTIM Nicolas N'Koulou n= 411
+
+Corners :
+6e minute : cross_right BY Romain Alessandrini (OM) n = 43
+9e minute : short_left BY Abdelaziz Barrada (OM) n = 60
+20e minute : cross_right BY Romain Alessandrini (OM) n = 102
+37e minute : cross_right BY Angel Di Maria (PSG) n = 181
+43e minute : cross_right BY Angel Di Maria (PSG) n = 206
+52e minute : cross_left BY Angel Di Maria (PSG) n = 242
+56e minute : cross_left BY Abdelaziz Barrada (OM) n = 263
+58e minute : cross_right BY Romain Alessandrini (OM) n = 276
+68e minute : cross_right BY Angel Di Maria (PSG) n = 313
+79e minute : cross_left BY Romain Alessandrini (OM) n = 357
