@@ -29,4 +29,6 @@ Le projet consistait à créer des visualisations et des tableaux de bord intera
 ## Remarques
 
 Assurez-vous d'avoir Tableau installé sur votre ordinateur
-Realise par @desbaa @kur0ii et 
+## Realiser avec Tableau par :
+ [@desbaa](https://github.com/desbaa) , [@kur0ii](https://github.com/kur0ii) et Thierry 
+
